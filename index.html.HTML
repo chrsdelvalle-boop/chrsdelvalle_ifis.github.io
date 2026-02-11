@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IFIS CDV | Cuestionario (Parte 1 + 2 + 3)</title>
+  <style>
+    :root{
+      --bg:#f4f7fb; --card:#ffffff; --text:#1f2d3d; --muted:#6b7a90;
+      --accent:#2ecc71; --accent2:#1ea85a; --danger:#e74c3c; --warn:#f39c12;
+      --border:#e6ecf5; --blue:#2b6cb0;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);}
+    .wrap{max-width:1020px;margin:0 auto;padding:18px;}
+    .header{
+      background:linear-gradient(135deg,#ffffff,#f7fffb);
+      border:1px solid var(--border);border-radius:14px;padding:18px;
+      box-shadow:0 8px 24px rgba(31,45,61,.06);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .logo{
+      width:42px;height:42px;border-radius:14px;background:var(--accent);
+      display:grid;place-items:center;color:white;font-weight:900;
+      box-shadow:0 10px 20px rgba(46,204,113,.22);
+    }
+    .title h1{font-size:18px;margin:0;}
+    .title p{margin:3px 0 0 0;color:var(--muted);font-size:13px;line-height:1.35;}
+    .pill{background:#ecfff4;color:#187e43;border:1px solid #c8f3da;padding:8px 10px;border-radius:999px;font-size:12px;white-space:nowrap;}
+
+    .card{
+      margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;
+      padding:16px;box-shadow:0 8px 24px rgba(31,45,61,.06);
+    }
+
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+    .tab{
+      padding:10px 12px;border-radius:999px;border:1px solid var(--border);
+      background:#fbfcff;color:#24406b;font-weight:900;cursor:pointer;
+      display:flex;align-items:center;gap:8px;
+    }
+    .tab.active{background:#ecfff4;border-color:#c8f3da;color:#187e43;}
+    .counter{font-size:12px;color:var(--muted);font-weight:800;}
+
+    .q{padding:14px 12px;border:1px solid var(--border);border-radius:12px;margin-bottom:12px;background:#fff;}
+    .q-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .q-title{margin:0 0 10px 0;font-weight:900;line-height:1.35;}
+    .q-tag{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;background:#fbfcff;}
+    .opts label{
+      display:block;padding:10px 10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;
+      cursor:pointer;transition:.12s ease-in-out;line-height:1.35;
+    }
+    .opts label:hover{border-color:#cfe7ff;box-shadow:0 4px 12px rgba(31,45,61,.05);}
+    .opts input{margin-right:10px;transform:translateY(1px);}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    button{border:0;padding:12px 14px;border-radius:12px;cursor:pointer;font-weight:900;font-size:14px;}
+    .btn-primary{background:var(--accent);color:white;}
+    .btn-primary:hover{background:var(--accent2);}
+    .btn-ghost{background:#eef3ff;color:#24406b;border:1px solid #dbe6ff;}
+    .btn-ghost:hover{filter:brightness(.98);}
+    .btn-outline{background:white;color:var(--blue);border:1px solid #cfe0ff;}
+    .btn-outline:hover{background:#f6f9ff;}
+
+    .result{margin-top:12px;padding:14px 12px;border-radius:12px;border:1px dashed var(--border);background:#fbfcff;}
+    .score{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+    .big{font-size:18px;font-weight:900;margin:0;}
+    .meta{margin:6px 0 0 0;color:var(--muted);font-size:13px;line-height:1.35;}
+    .badge{padding:8px 12px;border-radius:999px;font-weight:900;font-size:12px;border:1px solid;white-space:nowrap;}
+    .ok{background:#ecfff4;color:#187e43;border-color:#c8f3da;}
+    .bad{background:#fff1ef;color:#9e2a1f;border-color:#ffd0c9;}
+    .mid{background:#fff8e6;color:#8a5a00;border-color:#ffe4aa;}
+
+    .review{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;}
+    .review h3{margin:0 0 8px 0;font-size:15px;}
+    .miss{padding:10px 10px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:white;}
+    .miss strong{color:var(--danger);}
+    .miss small{color:var(--muted);display:block;margin-top:6px;line-height:1.35;}
+
+    .footer-note{margin-top:14px;color:var(--muted);font-size:12px;text-align:center;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">E</div>
+        <div class="title">
+          <h1>IFIS CDV | Cuestionario </h1>
+          <p>Parte 1 + Parte 2 + Parte 3 • Calificación por parte o global. 🌳</p>
+        </div>
+      </div>
+      <div class="pill">Modo prototipo • Offline • Auto-calificación</div>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tab1" onclick="showPart(1)">Parte 1 <span class="counter" id="count1"></span></button>
+        <button class="tab" id="tab2" onclick="showPart(2)">Parte 2 <span class="counter" id="count2"></span></button>
+        <button class="tab" id="tab3" onclick="showPart(3)">Parte 3 <span class="counter" id="count3"></span></button>
+      </div>
+
+      <div id="quiz"></div>
+
+      <div class="actions">
+        <button type="button" class="btn-primary" onclick="gradeCurrent()">Calificar esta parte</button>
+        <button type="button" class="btn-outline" onclick="gradeGlobal()">Calificar GLOBAL</button>
+        <button type="button" class="btn-ghost" onclick="resetAll()">Reiniciar todo</button>
+      </div>
+
+      <div id="out" class="result" style="display:none;"></div>
+      <div class="footer-note">🌳 IFIS CDV • Prototipo educativo</div>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   PARTE 1 (ya creada antes)
+   ========================= */
+const PART1 = [
+  { id:"p1q1", tag:"Arrendamiento financiero",
+    text:"¿Qué es el arrendamiento financiero?",
+    options:{A:"Un contrato de alquiler sin opción a compra.",B:"Un contrato de alquiler con opción a compra al final del mismo.",C:"Un contrato de venta total financiado mediante préstamo.",D:"Un acuerdo donde el arrendatario tiene el control operativo y parte de los riesgos del activo."},
+    correct:"B"
+  },
+  { id:"p1q2", tag:"Arrendamiento financiero",
+    text:"¿Cuál de las siguientes es una característica del arrendamiento financiero?",
+    options:{A:"El arrendador asume todos los riesgos y beneficios derivados del uso de los activos arrendados.",B:"El arrendatario no tiene derecho sobre el uso del activo durante el acuerdo de arrendamiento.",C:"El alquiler de arrendamiento para un período secundario es mucho menor.",D:"El arrendatario no tiene la opción de adquirir la propiedad del activo."},
+    correct:"C"
+  },
+  { id:"p1q3", tag:"Tipos de arrendamiento",
+    text:"¿A qué tipo de arrendamiento se refiere el siguiente concepto ¨ Es un tipo de arrendamiento en el que una entidad cede el uso de un bien a otra entidad a cambio de pagos periódicos, sin transferir la propiedad del bien ni ofrecer una opción de compra al final del contrato ¨?",
+    options:{A:"Arrendamiento financiero con opción a compra",B:"Arrendamiento puro",C:"Arrendamiento financiero operativo",D:"Arrendamiento financiero con opción a renovación"},
+    correct:"B"
+  },
+  { id:"p1q4", tag:"Arrendamiento financiero",
+    text:"¿Cuál no es un beneficio del arrendamiento financiero?",
+    options:{A:"Preservación de capital.",B:"Acceso a equipos de alta calidad.",C:"Flexibilidad y adaptabilidad.",D:"Costo total más alto a largo plazo"},
+    correct:"D"
+  },
+  { id:"p1q5", tag:"IFRS 16",
+    text:"¿Cuál es uno de los criterios principales para que un arrendamiento sea clasificado como financiero según las normas contables (por ejemplo, IFRS 16)?",
+    options:{A:"El arrendamiento debe tener una duración mínima de 5 años.",B:"El arrendador debe ser una institución financiera.",C:"El arrendatario obtiene la propiedad del activo al finalizar el contrato.",D:"El arrendatario tiene la opción de adquirir el activo al término del contrato a un precio sustancialmente menor que su valor de mercado."},
+    correct:"D"
+  },
+  { id:"p1q6", tag:"Funcionamiento",
+    text:"¿Cuál de las siguientes afirmaciones es verdadera respecto al funcionamiento de los arrendamientos financieros?",
+    options:{A:"Los arrendamientos financieros transfieren la propiedad del activo al arrendatario al finalizar el contrato.",B:"Los arrendamientos financieros pueden requerir que el arrendatario contabilice el activo arrendado como parte de su balance general.",C:"Los arrendamientos financieros no afectan la capacidad del arrendatario para obtener financiamiento adicional.",D:"Los pagos de arrendamiento en los arrendamientos financieros son siempre iguales a lo largo de la vida útil del contrato"},
+    correct:"B"
+  },
+  { id:"p1q7", tag:"Opción a compra",
+    text:"¿Cuál es la característica principal del arrendamiento financiero con opción a compra?",
+    options:{A:"El arrendatario realiza pagos periódicos que cubren tanto el costo de adquisición del bien como los intereses.",B:"Este tipo de arrendamiento no es cancelable, la inversión del arrendador queda asegurada.",C:"contrato de arrendamiento donde una entidad (arrendador) proporciona el uso de un bien a otra entidad (arrendatario) durante un periodo determinado a cambio de pagos periódicos.",D:"La propiedad del bien permanece con el arrendador durante todo el contrato y, al finalizar este, el bien es devuelto al arrendador."},
+    correct:"A"
+  },
+  { id:"p1q8", tag:"Rendimientos financieros",
+    text:"¿Qué son los rendimientos financieros?",
+    options:{A:"Es la ganancia que obtienes de tus inversiones o ahorros, expresada generalmente como un porcentaje.",B:"Se refieren a la cantidad de dinero invertido, sin considerar las ganancias o pérdidas.",C:"Son el valor nominal de una inversión al final del período sin ajustar por inflación.",D:"Los intereses generados por una cuenta de ahorros y no incluyen ganancias de inversiones en acciones o bonos."},
+    correct:"A"
+  },
+  { id:"p1q9", tag:"Estados financieros",
+    text:"¿Por qué son importantes los estados financieros para una empresa?",
+    options:{A:"Porque es una herramienta indispensable para la gestión empresarial.",B:"Proporcionan una visión clara y concisa de la situación financiera de la empresa",C:"Porque puede representar un rendimiento para las instituciones financieras al momento de invertir en algo",D:"Porque es la ganancia que obtienes de tus inversiones o ahorros",E:"Porque que impulsa el desarrollo económico."},
+    correct:"A"
+  },
+  { id:"p1q10", tag:"Macroeconomía",
+    text:"¿A nivel macroeconómico, los rendimientos financieros a qué afectan?",
+    options:{A:"A las empresas",B:"Tasas de interés, inflación y crecimiento económico.",C:"A la rentabilidad",D:"Inversiones"},
+    correct:"B"
+  },
+  { id:"p1q11", tag:"Planificación financiera",
+    text:"¿Qué es esencial para la planificación financiera personal o empresarial?",
+    options:{A:"Conocer los rendimientos esperados de las inversiones",B:"La ubicación de la sede central de la empresa",C:"El tamaño del equipo de marketing",D:"El número de proveedores utilizados"},
+    correct:"A"
+  },
+  { id:"p1q12", tag:"Rendimiento total",
+    text:"¿Qué incluye el rendimiento total?",
+    options:{A:"Pasivos y Activos",B:"Ingresos como ganancias y pérdidas de capital",C:"Flujo de efectivo",D:"Pérdidas de las ventas"},
+    correct:"B"
+  },
+  { id:"p1q13", tag:"Rendimiento corriente",
+    text:"¿Qué es el rendimiento corriente?",
+    options:{A:"Mide el rendimiento de una inversión en relación con un índice de benchmarking.",B:"Es la ganancia obtenida de una inversión en un periodo específico.",C:"Es el ingreso anual que se obtiene de una inversión en relación con su periodo actual"},
+    correct:"C"
+  },
+  { id:"p1q14", tag:"Tasas de crecimiento",
+    text:"¿Cuáles son las tasas de crecimiento?",
+    options:{A:"Tasa de Crecimientos de ingresos y gastos",B:"Tasa de Crecimientos de ganancias y ventas",C:"Tasa de Crecimiento de ventas e ingresos",D:"Tasa de Crecimiento de ingresos y ganancias"},
+    correct:"D"
+  },
+  { id:"p1q15", tag:"LOEPS",
+    text:"¿Cuál de las siguientes opciones es una obligación de las organizaciones referidas en la Ley Orgánica de Economía Popular y Solidaria?",
+    options:{A:"Organizar eventos de caridad para la comunidad",B:"Llevar un registro de todos los integrantes de la organización, archivos y registros de las actas",C:"Promover la igualdad de género dentro de la organización",D:"Ofrecer servicios gratuitos a sus miembros."},
+    correct:"B"
+  },
+  { id:"p1q16", tag:"LOEPS",
+    text:"¿Cuál de las siguientes acciones está prohibida para las personas y organizaciones según la Ley Orgánica de Economía Popular y Solidaria?",
+    options:{A:"Conceder preferencias o privilegios a los integrantes de la organización, incluyendo fundadores, directivos, funcionarios y empleados.",B:"Ofrecer becas y ayudas financieras a los miembros de la organización",C:"Permitir a los directivos utilizar su condición para establecer relaciones contractuales o laborales con otras personas u organizaciones",D:"Realizar donaciones benéficas a organizaciones externas"},
+    correct:"A"
+  },
+  { id:"p1q17", tag:"LOEPS",
+    text:"¿Cuál es la función principal de la Junta Nacional de Resolución de Conflictos de la Economía Popular y Solidaria?",
+    options:{A:"Resolver conflictos laborales entre empleados y empleadores",B:"Resolver, en apelación y última instancia administrativa, los recursos presentados contra actos administrativos dictados por la Superintendencia.",C:"Supervisar el cumplimiento de las leyes ambientales en el sector de la Economía Popular y Solidaria",D:"Proporcionar asesoría financiera a las cooperativas"},
+    correct:"B"
+  },
+  { id:"p1q18", tag:"LOEPS",
+    text:"¿Cuántos años durarán los vocales de la Junta en sus funciones y podrán ser reelegidos inmediatamente?",
+    options:{A:"Seis años y podrán ser reelegidos inmediatamente",B:"Dos años y no podrán ser reelegidos inmediatamente",C:"Cuatro años y no podrán ser reelegidos inmediatamente.",D:"Cuatro años y podrán ser reelegidos inmediatamente"},
+    correct:"C"
+  },
+  { id:"p1q19", tag:"LOEPS",
+    text:"¿Cuál es el término para que los recurrentes deduzcan los recursos previstos en esta Ley desde la notificación del acto administrativo?",
+    options:{A:"Diez días",B:"Cinco días",C:"Treinta días",D:"Quince días"},
+    correct:"B"
+  },
+  { id:"p1q20", tag:"LOEPS",
+    text:"¿Qué ocurre si la Superintendencia no resuelve el recurso administrativo dentro del término de treinta días?",
+    options:{A:"Se considera que el recurso es rechazado automáticamente",B:"La Superintendencia debe reiniciar el proceso desde el principio",C:"La competencia para resolver se pierde.",D:"El acto administrativo impugnado se anula automáticamente"},
+    correct:"C"
+  },
+  { id:"p1q21", tag:"LOEPS",
+    text:"¿Qué objetivo tiene el Estado al fomentar, promover y otorgar incentivos a las personas y organizaciones amparadas por esta Ley?",
+    options:{A:"Incrementar los impuestos recaudados por estas organizaciones",B:"Fomentar e impulsar su desarrollo y el cumplimiento de sus objetivos en el marco del sistema económico social y solidario.",C:"Facilitar la exportación de sus productos a mercados internacionales",D:"Integrar estas organizaciones en proyectos de infraestructura estatal"},
+    correct:"B"
+  },
+  { id:"p1q22", tag:"LOEPS",
+    text:"¿Qué asegura la Ley en cuanto al régimen de fomento o privilegio para las personas y organizaciones sujetas a esta Ley?",
+    options:{A:"Gozarán de un régimen de fomento o privilegio menor del que gocen otras organizaciones, sociedades o asociaciones con fines u objetivos similares",B:"No gozarán de ningún régimen de fomento o privilegio especial",C:"Gozarán del mismo régimen de fomento o privilegio que otras organizaciones, sociedades o asociaciones con fines u objetivos similares.",D:"Serán excluidos de cualquier régimen de fomento o privilegio"},
+    correct:"C"
+  }
+];
+
+/* =========================
+   PARTE 2 (ya creada)
+   ========================= */
+const PART2 = [
+  { id:"p2q1", tag:"Rendimientos financieros",
+    text:"1.- ¿Cuál de los siguientes factores no afecta directamente los rendimientos financieros?",
+    options:{a:"El riesgo asociado a la inversión.",b:"La inflación que puede erosionar el poder adquisitivo.",c:"El horizonte temporal de la inversión.",d:"El color del logotipo de la empresa."},
+    correct:"d"
+  },
+  { id:"p2q2", tag:"Rendimientos financieros",
+    text:"2.- ¿Por qué son importantes los rendimientos financieros para los inversores?",
+    options:{a:"Porque determinan el color del logotipo de la empresa.",b:"Porque reflejan la rentabilidad de una inversión y ayudan en la planificación financiera.",c:"Porque son la única medida de éxito en la gestión empresarial.",d:"Porque eliminan completamente el riesgo asociado a las inversiones."},
+    correct:"b"
+  },
+  { id:"p2q3", tag:"ROI",
+    text:"3.- ¿Cuál de los siguientes es una limitación del ROI?",
+    options:{a:"No considera el costo total de la inversión.",b:"No diferencia entre una inversión que genera beneficios rápidamente y otra que los genera a largo plazo.",c:"No es útil para evaluar la rentabilidad de proyectos de marketing.",d:"No puede aplicarse a la comparación de diferentes tipos de inversiones."},
+    correct:"b"
+  },
+  { id:"p2q4", tag:"ROI",
+    text:"4.- ¿En qué situación es más útil utilizar el ROI?",
+    options:{a:"Para evaluar la calidad de los productos de una empresa.",b:"Para medir la satisfacción del cliente en una empresa.",c:"Para comparar diferentes oportunidades de inversión y seleccionar las más prometedoras.",d:"Para analizar las políticas de recursos humanos en una empresa."},
+    correct:"c"
+  },
+  { id:"p2q5", tag:"ROA",
+    text:"5.- ¿Qué mide el rendimiento de los activos (ROA)?",
+    options:{a:"El ROA mide la eficiencia con la que una empresa utiliza sus activos para generar ganancias.",b:"El ROA trae la eficiencia con la que una empresa utiliza sus activos para generar pérdidas.",c:"El ROA mide la decadencia con la que una empresa no usa sus activos para generar ganancias."},
+    correct:"a"
+  },
+  { id:"p2q6", tag:"ROE",
+    text:"6.- ¿Cuál de los siguientes factores es más directamente representado por un ROE elevado?",
+    options:{a:"Una alta cantidad de activos fijos en la empresa.",b:"Una eficiente utilización del capital de los accionistas para generar ganancias.",c:"Un elevado nivel de deuda comparado con el patrimonio neto.",d:"Una amplia gama de productos y servicios ofrecidos por la empresa."},
+    correct:"b"
+  },
+  { id:"p2q7", tag:"Dividendos",
+    text:"7.- ¿Qué mide la rentabilidad por dividendo?",
+    options:{a:"Es un ratio que indica la cantidad de ganancia que se recupera de la inversión con el reparto de dividendos",b:"Es un ratio que indica la capacidad de endeudamiento de la compañía",c:"Un elevado nivel de deuda comparado con el patrimonio neto."},
+    correct:"a"
+  },
+  { id:"p2q8", tag:"ROE",
+    text:"Pregunta 1: ¿Cuál de las siguientes fórmulas representa el cálculo del rendimiento sobre el capital (ROE)?",
+    options:{a:"Utilidad neta / Activos totales",b:"Utilidad neta / Capital propio",c:"Utilidad bruta / Ventas netas",d:"Activos corrientes / Pasivos corrientes"},
+    correct:"b"
+  },
+  { id:"p2q9", tag:"Rotación de activos",
+    text:"Pregunta 2: ¿Qué indica una alta rotación de activos en una empresa?",
+    options:{a:"Alta rentabilidad",b:"Alta liquidez",c:"Alta deuda",d:"Alta eficiencia en el uso de sus activos"},
+    correct:"d"
+  },
+  { id:"p2q10", tag:"Indicadores",
+    text:"Pregunta 3 ¿Cuál de los siguientes indicadores se utiliza principalmente para medir el rendimiento financiero de una empresa?",
+    options:{A:"Margen de beneficio bruto",B:"Rotación de inventarios",C:"Tasa de retorno sobre los activos (ROA)",D:"Relación deuda/capital",E:"Ciclo de conversión de efectivo"},
+    correct:"C"
+  },
+  { id:"p2q11", tag:"Métricas",
+    text:"Pregunta 4 ¿Cuál de las siguientes métricas se utiliza principalmente para evaluar el rendimiento financiero de una empresa?",
+    options:{A:"Margen de contribución",B:"Tasa interna de retorno (TIR)",C:"Índice de rotación de inventarios",D:"Tasa de crecimiento anual compuesta (CAGR)"},
+    correct:"B"
+  },
+  { id:"p2q12", tag:"VPN",
+    text:"Pregunta 5 ¿Qué métrica financiera se utiliza para evaluar el valor temporal del dinero y se considera al calcular el valor presente neto (VPN)?",
+    options:{A:"Tasa de descuento",B:"Índice de endeudamiento",C:"Rendimiento sobre ventas (ROS)",D:"Periodo medio de cobro"},
+    correct:"A"
+  },
+  { id:"p2q13", tag:"Liquidez",
+    text:"Pregunta 6 ¿Cuál de los siguientes índices se utiliza para medir la capacidad de una empresa para cubrir sus deudas a corto plazo con sus activos más líquidos?",
+    options:{A:"Índice de solvencia",B:"Razón de efectivo",C:"Razón rápida",D:"Índice de rotación de activos"},
+    correct:"C"
+  },
+  { id:"p2q14", tag:"EBITDA",
+    text:"Pregunta 7 ¿Cuál de los siguientes indicadores mide la rentabilidad de las operaciones principales de una empresa sin considerar los efectos de la estructura de capital y los impuestos?",
+    options:{A:"Margen de EBIT",B:"Rendimiento sobre ventas (ROS)",C:"Margen de beneficio bruto",D:"Margen de EBITDA"},
+    correct:"D"
+  },
+  { id:"p2q15", tag:"Economía popular solidaria",
+    text:"1. ¿Qué es la economía popular solidaria?",
+    options:{A:"Un sistema económico basado en el lucro.",B:"Un modelo que promueve la cooperación y el bienestar social.",C:"Un tipo de economía estatal.",D:"Un sistema financiero tradicional."},
+    correct:"B"
+  },
+  { id:"p2q16", tag:"Economía popular solidaria",
+    text:"2. ¿Cuál es uno de los principios fundamentales de la economía popular solidaria?",
+    options:{A:"Competencia desleal.",B:"Maximización de ganancias.",C:"Solidaridad y cooperación.",D:"Privatización de recursos."},
+    correct:"C"
+  },
+  { id:"p2q17", tag:"Economía popular solidaria",
+    text:"3. ¿Qué tipo de organizaciones suelen formar parte de la economía popular solidaria?",
+    options:{A:"Empresas multinacionales.",B:"Cooperativas y asociaciones.",C:"Bancos privados.",D:"Corporaciones estatales."},
+    correct:"B"
+  },
+  { id:"p2q18", tag:"Economía popular solidaria",
+    text:"4. ¿Cuál de las siguientes es una ventaja de la economía popular solidaria?",
+    options:{A:"Genera desempleo.",B:"Promueve la inclusión social.",C:"Aumenta la desigualdad.",D:"Fomenta el individualismo."},
+    correct:"B"
+  },
+  { id:"p2q19", tag:"Economía popular solidaria",
+    text:"5. ¿Qué papel juegan las comunidades en la economía popular solidaria?",
+    options:{A:"No tienen ningún papel.",B:"Son fundamentales para la toma de decisiones.",C:"Solo son beneficiarias de los servicios.",D:"Solo participan en la producción."},
+    correct:"B"
+  },
+  { id:"p2q20", tag:"Economía popular solidaria",
+    text:"6. ¿Cuál es un ejemplo de un producto típico de la economía popular solidaria?",
+    options:{A:"Productos de lujo.",B:"Alimentos orgánicos y artesanías.",C:"Electrónica de consumo.",D:"Ropa de marca."},
+    correct:"B"
+  },
+  { id:"p2q21", tag:"Economía popular solidaria",
+    text:"7. ¿Qué se busca fomentar mediante la economía popular solidaria?",
+    options:{A:"El consumo excesivo.",B:"La sostenibilidad y el desarrollo local.",C:"La acumulación de capital.",D:"La competencia global."},
+    correct:"B"
+  },
+  { id:"p2q22", tag:"Economía popular solidaria",
+    text:"8. ¿Qué tipo de financiamiento es común en la economía popular solidaria?",
+    options:{A:"Créditos bancarios tradicionales.",B:"Microcréditos y fondos comunitarios.",C:"Inversión extranjera directa.",D:"Préstamos de alto interés."},
+    correct:"B"
+  },
+  { id:"p2q23", tag:"Economía popular solidaria",
+    text:"9. ¿Cómo se distribuyen generalmente las ganancias en la economía popular solidaria?",
+    options:{A:"Se concentran en los dueños.",B:"Se reinvierten en la comunidad y se distribuyen equitativamente.",C:"Se donan a organizaciones benéficas.",D:"Se guardan en cuentas bancarias."},
+    correct:"B"
+  },
+  { id:"p2q24", tag:"Economía popular solidaria",
+    text:"10. ¿Qué impacto tiene la economía popular solidaria en el medio ambiente?",
+    options:{A:"Negativo, ya que promueve el consumismo.",B:"Positivo, al fomentar prácticas sostenibles.",C:"Ninguno, no se relaciona con el medio ambiente.",D:"Solo impacta en áreas urbana"},
+    correct:"B"
+  },
+  { id:"p2q25", tag:"EPS",
+    text:"¿Cuál de los siguientes principios NO es uno de los principios de la Economía Popular y Solidaria (EPS)?",
+    options:{A:"Solidaridad y Cooperación",B:"Gestión Democrática",C:"Competencia y Maximización de Beneficios",D:"Sostenibilidad"},
+    correct:"C"
+  },
+  { id:"p2q26", tag:"EPS",
+    text:"¿Cuál es uno de los principales objetivos de la Economía Popular y Solidaria?",
+    options:{A:"Maximizar los beneficios individuales",B:"Reducir las desigualdades económicas y sociales",C:"Priorizar el capital sobre las personas",D:"Fomentar la competencia entre miembros"},
+    correct:"B"
+  },
+  { id:"p2q27", tag:"Ecuador - sistema social y solidario",
+    text:"¿Cuál es uno de los objetivos principales del sistema económico social y solidario del Ecuador, según su visión?",
+    options:{a:"Fomentar la competencia y el lucro empresarial.",b:"Priorizar el trabajo y las personas como sujetos y fines en su accionar.",c:"Dependencia de los mercados externos.",d:"Reducir el empleo en el sector público."},
+    correct:"b"
+  },
+  { id:"p2q28", tag:"Ventajas EPS",
+    text:"¿Cuál es una de las Ventajas de la Economía Popular y Solidaria (EPS)?",
+    options:{A:"Solidaridad y Cooperación",B:"Gestión Democrática",C:"Cooperación, corresponsabilidad y el cuidado del medio ambiente.",D:"Sostenibilidad"},
+    correct:"C"
+  }
+];
+
+/* =========================
+   PARTE 3 (NUEVA)
+   ========================= */
+const PART3 = [
+  {
+    id:"p3q1", tag:"EPS",
+    text:"¿Por qué es importante la Economía Popular y Solidaria (EPS)?",
+    options:{
+      A:"Inclusión",
+      B:"Igualdad",
+      C:"Permite adecuar las políticas sociales a las preferencias y necesidades de los ciudadanos",
+      D:"Sostenibilidad"
+    },
+    correct:"C"
+  },
+  {
+    id:"p3q2", tag:"Fomento productivo",
+    text:"¿Qué ofrece el fomento productivo?",
+    options:{
+      A:"Inclusión sociolaboral",
+      B:"Solidaridad",
+      C:"control democrático",
+      D:"Posicionarse como espacio clave para la inclusión sociolaboral y el desarrollo de proyectos basados en relaciones de cooperación, control democrático y solidaridad."
+    },
+    correct:"D"
+  },
+  {
+    id:"p3q3", tag:"EPS",
+    text:"¿Qué aportan los principios y practicas la Economía Popular y Solidaria (EPS)?",
+    options:{
+      A:"Inclusión",
+      B:"Propuesta de transformación",
+      C:"Propuesta de trabajos",
+      D:"Propuesta de cambios"
+    },
+    correct:"B"
+  },
+  {
+    id:"p3q4", tag:"EPS",
+    text:"1. ¿Cuál es uno de los principios fundamentales de la economía popular y solidaria?",
+    options:{
+      a:"Competencia",
+      b:"Lucro",
+      c:"Cooperación",
+      d:"Monopolio"
+    },
+    correct:"c"
+  },
+  {
+    id:"p3q5", tag:"EPS",
+    text:"2. ¿Cuál es el principio fundamental que sustenta la economía popular y solidaria según el párrafo?",
+    options:{
+      a:"Competencia entre individuos y organizaciones.",
+      b:"Maximización del lucro y el crecimiento económico.",
+      c:"Solidaridad y convivencia entre seres humanos y el planeta.",
+      d:"Monopolio de recursos y mercados clave."
+    },
+    correct:"c"
+  },
+  {
+    id:"p3q6", tag:"EPS - Manifestaciones",
+    text:"3. Empareja cada manifestación de la Economía Popular y Solidaria con su descripción correspondiente: Manifestación: 1. Minga o minka 2. Randi Randi o Cambia Mano 3. Feria del trueque | Descripciones: A. Trabajo comunitario en la construcción de caminos, sistemas de agua B. Apoyo mutuo entre familiares y vecinos en labores agrícolas y constructivas. C. Intercambio directo de bienes sin utilizar dinero. Opciones de respuesta:",
+    options:{
+      a:"1A, 2B, 3C",
+      b:"1C, 2A, 3B",
+      c:"1B, 2A, 3C"
+    },
+    correct:"a"
+  },
+  {
+    id:"p3q7", tag:"EPS",
+    text:"4. ¿Cuál de los siguientes principios NO es característico de la Economía Popular y Solidaria?",
+    options:{
+      a:"Priorización del trabajo y del ser humano sobre el capital.",
+      b:"Relaciones de solidaridad, cooperación y reciprocidad.",
+      c:"Búsqueda constante de la máxima ganancia individual.",
+      d:"Orientación hacia el bien común y la armonía con la naturaleza."
+    },
+    correct:"c"
+  },
+  {
+    id:"p3q8", tag:"EPS",
+    text:"5. ¿Cuál de las siguientes opciones NO es considerada una forma de organización dentro de la EPS?",
+    options:{
+      a:"Cooperativas",
+      b:"Asociaciones",
+      c:"Empresas multinacionales",
+      d:"Comunidades"
+    },
+    correct:"c"
+  },
+  {
+    id:"p3q9", tag:"EPS",
+    text:"6. ¿Cuál es el principal objetivo de la EPS?",
+    options:{
+      a:"Maximizar las ganancias de los accionistas.",
+      b:"Satisfacer necesidades y generar ingresos, basados en relaciones de solidaridad.",
+      c:"Dominar el mercado y eliminar la competencia.",
+      d:"Acumular capital y poder económico."
+    },
+    correct:"b"
+  },
+  {
+    id:"p3q10", tag:"EPS",
+    text:"7. ¿Qué implica la autogestión en el contexto de la EPS?",
+    options:{
+      a:"Que las decisiones importantes se tomen de manera centralizada.",
+      b:"Que los trabajadores tengan un papel activo en la toma de decisiones y gestión de la organización.",
+      c:"Que la organización dependa de un único líder.",
+      d:"Que los procesos productivos sean automatizados al máximo."
+    },
+    correct:"b"
+  },
+  {
+    id:"p3q11", tag:"EPS",
+    text:"8. ¿Cuál de las siguientes afirmaciones sobre la EPS es FALSA?",
+    options:{
+      a:"La EPS busca alternativas al modelo económico tradicional basado en la competencia y el lucro.",
+      b:"La EPS promueve la participación activa de todos sus miembros.",
+      c:"La EPS es un modelo económico que solo funciona en pequeñas comunidades.",
+      d:"La EPS busca construir relaciones económicas más justas y equitativas."
+    },
+    correct:"c"
+  }
+];
+
+/* =========================
+   UI + lógica
+   ========================= */
+let currentPart = 1;
+
+function allParts(){
+  return { 1: PART1, 2: PART2, 3: PART3 };
+}
+
+function showPart(part){
+  currentPart = part;
+  document.getElementById("tab1").classList.toggle("active", part===1);
+  document.getElementById("tab2").classList.toggle("active", part===2);
+  document.getElementById("tab3").classList.toggle("active", part===3);
+  render();
+  hideResult();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function render(){
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+  const list = allParts()[currentPart];
+
+  list.forEach((q, idx) => {
+    const div = document.createElement("div");
+    div.className = "q";
+    div.innerHTML = `
+      <div class="q-head">
+        <p class="q-title">${idx+1}. ${q.text}</p>
+        <span class="q-tag">${q.tag}</span>
+      </div>
+      <div class="opts">
+        ${Object.entries(q.options).map(([k,v]) => `
+          <label>
+<input type="radio" name="${q.id}" value="${k}" onchange="verificarRespuesta('${q.id}', '${q.correct}')">
+            <b>${k})</b> ${v}
+          </label>
+        `).join("")}
+      </div>
+    `;
+    quiz.appendChild(div);
+  });
+
+  document.getElementById("count1").textContent = `(${PART1.length})`;
+  document.getElementById("count2").textContent = `(${PART2.length})`;
+  document.getElementById("count3").textContent = `(${PART3.length})`;
+}
+
+function hideResult(){
+  const out = document.getElementById("out");
+  out.style.display = "none";
+  out.innerHTML = "";
+}
+
+function compute(list){
+  let correct = 0, answered = 0;
+  const misses = [];
+
+  list.forEach(q => {
+    const picked = document.querySelector(`input[name="${q.id}"]:checked`);
+    if(picked){
+      answered++;
+      if(picked.value === q.correct) correct++;
+      else misses.push({q, your:picked.value});
+    } else {
+      misses.push({q, your:"(sin responder)"});
+    }
+  });
+
+  return { correct, answered, total:list.length, misses };
+}
+
+function badgeFor(pct){
+  if(pct >= 70) return { cls:"ok", text:"APROBADO ✅" };
+  if(pct >= 50) return { cls:"mid", text:"CASI ✅" };
+  return { cls:"bad", text:"REPROBADO ❌" };
+}
+
+
+function verificarRespuesta(preguntaId, correcta){
+
+  const seleccionada = document.querySelector(`input[name="${preguntaId}"]:checked`);
+
+  if(!seleccionada) return;
+
+  let resultado = document.getElementById("result_" + preguntaId);
+
+  if(!resultado){
+    resultado = document.createElement("div");
+    resultado.id = "result_" + preguntaId;
+    resultado.style.marginTop = "6px";
+    resultado.style.fontWeight = "bold";
+
+    seleccionada.closest(".opts").appendChild(resultado);
+  }
+
+  if(seleccionada.value === correcta){
+    resultado.innerHTML = "✅ Correcto";
+    resultado.style.color = "green";
+  }else{
+    resultado.innerHTML = "❌ Incorrecto";
+    resultado.style.color = "red";
+  }
+
+}
+
+
+function renderResult(title, data, extraHTML=""){
+  const pct = Math.round((data.correct / data.total) * 100);
+  const b = badgeFor(pct);
+  const out = document.getElementById("out");
+  out.style.display = "block";
+  out.innerHTML = `
+    <div class="score">
+      <div>
+        <p class="big">${title}: ${data.correct} / ${data.total} (${pct}%)</p>
+        <p class="meta">Respondidas: ${data.answered} • Sin responder: ${data.total - data.answered}</p>
+        ${extraHTML}
+      </div>
+      <div class="badge ${b.cls}">${b.text}</div>
+    </div>
+
+    <div class="review">
+      <h3>Revisión (errores / faltantes)</h3>
+      ${
+        data.misses.length === 0
+          ? "<p class='meta'>¡Todo correcto! 🌳</p>"
+          : data.misses.map(m => `
+            <div class="miss">
+              <div><strong>Tu respuesta:</strong> ${m.your}</div>
+              <div><b>Correcta:</b> ${m.q.correct}) ${m.q.options[m.q.correct]}</div>
+              <small>${m.q.text}</small>
+            </div>
+          `).join("")
+      }
+    </div>
+  `;
+  out.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function gradeCurrent(){
+  const list = allParts()[currentPart];
+  const data = compute(list);
+  renderResult(`Resultado Parte ${currentPart}`, data);
+}
+
+function gradeGlobal(){
+  const combined = [...PART1, ...PART2, ...PART3];
+  const data = compute(combined);
+
+  const p1 = compute(PART1);
+  const p2 = compute(PART2);
+  const p3 = compute(PART3);
+
+  const p1pct = Math.round((p1.correct/p1.total)*100);
+  const p2pct = Math.round((p2.correct/p2.total)*100);
+  const p3pct = Math.round((p3.correct/p3.total)*100);
+
+  renderResult(
+    "Resultado GLOBAL (Parte 1 + Parte 2 + Parte 3)",
+    data,
+    `<p class="meta"><b>Resumen:</b> Parte 1 = ${p1.correct}/${p1.total} (${p1pct}%) • Parte 2 = ${p2.correct}/${p2.total} (${p2pct}%) • Parte 3 = ${p3.correct}/${p3.total} (${p3pct}%)</p>`
+  );
+}
+
+function resetAll(){
+  [...PART1, ...PART2, ...PART3].forEach(q => {
+    document.querySelectorAll(`input[name="${q.id}"]`).forEach(r => r.checked = false);
+  });
+  hideResult();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>
